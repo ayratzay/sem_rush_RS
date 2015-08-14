@@ -17,7 +17,7 @@ matrix_freq = np.matrix(l_data)
 zero_mask_matrix = matrix_freq == 0
 n_features = 10
 reg_alpha = 0.1
-learning_rate = 0.00005
+learning_rate = 0.0000005
 
 X = np.random.rand(matrix_freq.shape[1],n_features)  # report params
 theta = np.random.rand(matrix_freq.shape[0],n_features) # user params
@@ -78,3 +78,36 @@ for i in range(100):
 
     X = X - (learning_rate * X_grad)
     theta = theta - (learning_rate * theta_grad)
+
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+
+heatmap, xedges, yedges = np.histogram2d(matrix_freq_log, bins=50)
+extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+
+plt.clf()
+plt.imshow(heatmap, extent=extent)
+plt.show()
+
+fig, ax = plt.subplots()
+heatmap = ax.pcolor(matrix_freq_log)
+plt.show()
+
+
+
+
+a = 0.01
+mask = np.random.choice([False, True], matrix_freq_log.shape[0], p=[1-a, a])
+matrix_freq_log[mask]
+
+matrix_freq_over_3 = (matrix_freq > 3).astype(int)
+axis_sum_more_1 = matrix_freq_over_3.sum(axis=1) != 0
+matrix_freq_over_3[np.array(axis_sum_more_1)].shape
+# matrix_freq_ones = matrix_freq / matrix_freq
+
+mask = np.random.choice([False, True], matrix_freq_over_3.shape[0], p=[1-a, a])
+matrix_freq_over_3[mask]
+
+model = TSNE(n_components=2, random_state=0)
+dt = model.fit_transform(matrix_freq_over_3[mask])
+plt.scatter(dt[:,0],dt[:,1])
