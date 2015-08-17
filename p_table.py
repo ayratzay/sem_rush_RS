@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import pearsonr
 import matplotlib.pyplot as plt
 
-with open('C:\Users\Freeman\Downloads\Test for web-analyst (2).csv', 'rb') as rh:
+with open('Test for web-analyst (2).csv', 'rb') as rh:
     reader = rh.readlines()
     for line in reader:
         l = line.split('\r')
@@ -48,4 +48,20 @@ ax1.set_xticks(np.arange(tbl.shape[1])+0.5, minor=False)
 ax1.set_xticklabels(names, minor=False)
 ax1.set_yticklabels(names, minor=False)
 plot1 = ax1.pcolormesh(tbl)
+cbar1 = plt.colorbar(plot1)
+
+
+
+b = np.sum(tbl, axis = 0)
+idx = b.argsort()
+tb1 = np.take(tbl, idx, axis=1)
+
+
+ax1 = plt.subplot()
+ax1.set_yticks(np.arange(tbl.shape[0])+0.5, minor=False)
+ax1.set_xticks(np.arange(tbl.shape[1])+0.5, minor=False)
+
+ax1.set_xticklabels(np.take(np.array(names), idx), minor=False)
+ax1.set_yticklabels(np.take(np.array(names), idx), minor=False)
+plot1 = ax1.pcolormesh(np.take(tb1, idx, axis=1))
 cbar1 = plt.colorbar(plot1)
